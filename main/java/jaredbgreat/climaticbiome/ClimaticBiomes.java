@@ -1,6 +1,7 @@
 package jaredbgreat.climaticbiome;
 
 import jaredbgreat.climaticbiome.biomes.ModBiomes;
+import jaredbgreat.climaticbiome.compat.dt.DynamicTreeHelper;
 import jaredbgreat.climaticbiome.generation.BetterWorldType;
 import jaredbgreat.climaticbiome.proxy.IProxy;
 import jaredbgreat.climaticbiome.util.BlockRegistrar;
@@ -17,7 +18,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class ClimaticBiomes {
 	public static ClimaticBiomes instance;
 	public static BetterWorldType worldType;
-	public static final boolean gotBoP    = bopLoaded();
+	public static boolean gotBoP;
+	public static boolean gotDT;
 
 	@SidedProxy(clientSide = "jaredbgreat.climaticbiome.proxy.ClientProxy",
 			    serverSide = "jaredbgreat.climaticbiome.proxy.ServerProxy")
@@ -27,17 +29,27 @@ public class ClimaticBiomes {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	instance = this;
+    	gotBoP   = bopLoaded();
+    	gotDT    = dtLoaded();
     	//configHandler = new ConfigHandler(event.getModConfigurationDirectory().toPath()
     	//		+ File.separator + Info.DIR);
     	BlockRegistrar.initBlocks();
     	ItemRegistrar.initItems();
     	worldType = new BetterWorldType();
     	ModBiomes.createBiomes();
+    	
+    	if(gotDT) {
+    		DynamicTreeHelper.preInit();
+    	}
     }
 
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {    	
+    	if(gotDT) {
+    		DynamicTreeHelper.init();
+    	}
+    }
 
 
     @EventHandler
@@ -48,6 +60,11 @@ public class ClimaticBiomes {
 
     private static boolean bopLoaded() {
 		return net.minecraftforge.fml.common.Loader.isModLoaded("biomesoplenty");
+	}
+
+
+    private static boolean dtLoaded() {
+		return net.minecraftforge.fml.common.Loader.isModLoaded("dynamictrees");
 	}
 
 
