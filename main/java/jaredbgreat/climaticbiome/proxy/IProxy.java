@@ -7,5 +7,6 @@ public interface IProxy {
 
 	public void registerItemRender(Item item, int meta, String id);
 	public void fixRenders(BlockLeaves in);
-	
+	public void preInit();
+	public void init();
 }

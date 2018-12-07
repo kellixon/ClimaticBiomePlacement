@@ -1,5 +1,7 @@
 package jaredbgreat.climaticbiome.proxy;
 
+import jaredbgreat.climaticbiome.ClimaticBiomes;
+import jaredbgreat.climaticbiome.compat.dt.DynamicTreeHelper;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -17,6 +19,20 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void fixRenders(BlockLeaves in) {
 		in.setGraphicsLevel(Minecraft.getMinecraft().isFancyGraphicsEnabled());
+	}
+
+	@Override
+	public void preInit() {
+    	if(ClimaticBiomes.gotDT) {
+    		DynamicTreeHelper.clientPreInit();
+    	}
+	}
+
+	@Override
+	public void init() {
+    	if(ClimaticBiomes.gotDT) {
+    		DynamicTreeHelper.clientInit();
+    	}
 	}
 	
 	

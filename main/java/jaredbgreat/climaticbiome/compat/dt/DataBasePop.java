@@ -29,18 +29,23 @@ public class DataBasePop implements IBiomeDataBasePopulator {
 		db.setSpeciesSelector(ModBiomes.warmForest, 
 				              new RandomSpeciesSelector().add(oak, 4).add(DynamicTreeHelper.floridaPine, 1), 
 				              Operation.REPLACE);
+		db.setCancelVanillaTreeGen(ModBiomes.warmForest, true);
 		db.setSpeciesSelector(ModBiomes.warmForestHills, 
 	              			  new RandomSpeciesSelector().add(oak, 4).add(DynamicTreeHelper.floridaPine, 1), 
 	                          Operation.REPLACE);
+		db.setCancelVanillaTreeGen(ModBiomes.warmForestHills, true);
 		db.setSpeciesSelector(ModBiomes.tropicalForest, 
 							  new RandomSpeciesSelector().add(acacia, 4).add(oak, 2).add(jungle, 1), 
 							  Operation.REPLACE);
+		db.setCancelVanillaTreeGen(ModBiomes.tropicalForest, true);
 		db.setSpeciesSelector(ModBiomes.tropicalForestHills, 
     			  			  new RandomSpeciesSelector().add(acacia, 4).add(oak, 2).add(jungle, 1), 
     			  			  Operation.REPLACE);
+		db.setCancelVanillaTreeGen(ModBiomes.tropicalForestHills, true);
 		db.setSpeciesSelector(ModBiomes.pineWoods, 
 	  			  			  new RandomSpeciesSelector().add(DynamicTreeHelper.floridaPine, 4).add(oakswamp, 1), 
 	  			  			  Operation.REPLACE);
+		db.setCancelVanillaTreeGen(ModBiomes.pineWoods, true);
 	}
 
 }

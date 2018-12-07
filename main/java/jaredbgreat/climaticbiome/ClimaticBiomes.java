@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid=Info.ID, name=Info.NAME, version=Info.VERSION,
-		acceptableRemoteVersions=Info.VERSION, dependencies="after:biomesoplenty")
+		acceptableRemoteVersions=Info.VERSION, dependencies="after:biomesoplenty;after:dynamictrees")
 public class ClimaticBiomes {
 	public static ClimaticBiomes instance;
 	public static BetterWorldType worldType;
@@ -36,11 +36,11 @@ public class ClimaticBiomes {
     	BlockRegistrar.initBlocks();
     	ItemRegistrar.initItems();
     	worldType = new BetterWorldType();
-    	ModBiomes.createBiomes();
-    	
+    	ModBiomes.createBiomes();    	
     	if(gotDT) {
     		DynamicTreeHelper.preInit();
     	}
+    	proxy.preInit();
     }
 
 
@@ -49,6 +49,7 @@ public class ClimaticBiomes {
     	if(gotDT) {
     		DynamicTreeHelper.init();
     	}
+    	proxy.init();
     }
 
 
