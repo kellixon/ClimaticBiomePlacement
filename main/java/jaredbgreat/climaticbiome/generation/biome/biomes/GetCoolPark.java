@@ -1,11 +1,9 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
-import jaredbgreat.climaticbiome.generation.biome.compat.BoP;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 public class GetCoolPark implements IBiomeSpecifier {
 	private static GetCoolPark pland;
@@ -22,17 +20,16 @@ public class GetCoolPark implements IBiomeSpecifier {
 		parks = new BiomeList();
 		plains = GetCoolPlains.getPlains();
 		woods = GetCoolForest.getForest();
-		if(ConfigHandler.useCfg) {
-			if(ConfigHandler.useBoP) BoP.addCoolPark(parks);
-			DefReader.readBiomeData(parks, "ParklandCool.cfg");			
-		}
+		DefReader.readBiomeData(parks, "ParklandCool.cfg");
+		parks.addItem(woods);
+		parks.addItem(plains);
 	}
 	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		int seed = tile.getBiomeSeed();
-		if(parks.isEmpty() || ((seed & 5) == 0)) {
+		if(parks.isEmpty() || ((seed % 7) == 0)) {
 			if((seed & 1) == 0) {
 				tile.nextBiomeSeed();
 				return woods.getBiome(tile);
@@ -43,6 +40,11 @@ public class GetCoolPark implements IBiomeSpecifier {
 		}
 		tile.nextBiomeSeed();
 		return parks.getBiome(tile);
+	}
+	
+	
+	BiomeList getList() {
+		return parks;
 	}
 	
 	

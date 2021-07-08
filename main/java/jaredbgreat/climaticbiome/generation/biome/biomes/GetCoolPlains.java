@@ -1,13 +1,10 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.LeafBiome;
-import jaredbgreat.climaticbiome.generation.biome.SeedDoubleBiome;
-import jaredbgreat.climaticbiome.generation.biome.compat.BoP;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 /**
  * This specifer is specifically for words using biome mods that 
@@ -23,16 +20,11 @@ public class GetCoolPlains implements IBiomeSpecifier  {
 		init();
 	}
 	private BiomeList plains;
-	private GetAlpine alpine;
 	
 	
 	public void init() {
 		plains = new BiomeList();
-		alpine = GetAlpine.getAlpine();
-		if(ConfigHandler.useBoP) BoP.addCoolPlains(plains);
-		if(ConfigHandler.useCfg) {
-			DefReader.readBiomeData(plains, "PlainsCool.cfg");
-		}
+		DefReader.readBiomeData(plains, "PlainsCool.cfg");
 		if(plains.isEmpty()) {
 			plains.addItem(new LeafBiome(1));
 		}
@@ -40,12 +32,8 @@ public class GetCoolPlains implements IBiomeSpecifier  {
 	
 	
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		int seed = tile.getBiomeSeed();
-		if((seed % 4) == 0) {
-			tile.nextBiomeSeed();
-			return alpine.getBiome(tile);
-		}
 		tile.nextBiomeSeed();
 		return plains.getBiome(tile);
 	}
@@ -55,6 +43,11 @@ public class GetCoolPlains implements IBiomeSpecifier  {
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	
+	BiomeList getList() {
+		return plains;
 	}
 	
 	

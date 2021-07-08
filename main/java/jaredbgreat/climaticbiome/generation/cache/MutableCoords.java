@@ -1,9 +1,9 @@
 package jaredbgreat.climaticbiome.generation.cache;
 
-import jaredbgreat.climaticbiome.util.SpatialNoise;
+import jaredbgreat.climaticbiome.util.SpatialHash;
 
 public class MutableCoords {
-	private static final SpatialNoise NH = new SpatialNoise(0xADD5C0DE);
+	private static final SpatialHash NH = new SpatialHash(0xADD5C0DE);
 	private int x, z;
 	
 	
@@ -22,6 +22,9 @@ public class MutableCoords {
             if(other instanceof MutableCoords) {
                     MutableCoords o = (MutableCoords)other;
                     return ((o.x == x) && (o.z == z));
+            } else if(other instanceof Coords) {
+                    Coords o = (Coords)other;
+                    return ((o.getX() == x) && (o.getZ() == z));
             }
             return false;
 	}
@@ -53,11 +56,7 @@ public class MutableCoords {
         }
         
         
-        public static int absMod(int n, int m) {
-            int out = n % m;
-            if(out < 0) {
-                out += m;
-            }
-            return out;
+        public String toString() {
+        	return "(" + x + ", " + z + ")";
         }
 }

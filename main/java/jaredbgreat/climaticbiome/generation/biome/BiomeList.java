@@ -1,9 +1,11 @@
 package jaredbgreat.climaticbiome.generation.biome;
 
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BiomeList implements IBiomeSpecifier {
 	private final List<IBiomeSpecifier> list;
@@ -15,10 +17,18 @@ public class BiomeList implements IBiomeSpecifier {
 	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		tile.nextBiomeSeed();
-		return list.get(tile.getBiomeSeed() % list.size())
-				.getBiome(tile.nextBiomeSeed());
+		try {
+			return list.get(tile.getBiomeSeed() % list.size())
+					.getBiome(tile);
+		} catch (ArithmeticException ex) {
+			Logger.getLogger("Minecraft").log(Level.SEVERE, 
+					"A biome was requested from an empty biome list!  "
+					+ "\nAll lists must contain at least one biome (fix your configs)."
+							, ex);
+			throw ex;
+		}
 	}
 	
 	
@@ -43,6 +53,16 @@ public class BiomeList implements IBiomeSpecifier {
 	
 	public void addItems(List<IBiomeSpecifier> biomes) {
 		list.addAll(biomes);
+	}
+	
+	
+	public boolean remove(IBiomeSpecifier bs) {
+		return list.remove(bs);
+	}
+	
+	
+	public boolean merge(BiomeList other) {
+		return list.addAll(other.list);
 	}
 	
 	

@@ -1,9 +1,10 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
+import jaredbgreat.climaticbiome.configuration.ConfigHandler;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.SeedDoubleBiome;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 public class GetWarmPlains implements IBiomeSpecifier {
 	private static GetWarmPlains plains;
@@ -13,17 +14,22 @@ public class GetWarmPlains implements IBiomeSpecifier {
 	}
 	private GetPlains cool;	
 	private GetSavanna hot;
-	private static final int tbound = 15;
+	private int tbound = 15;
 	
 	
 	public void init() {
 		cool = GetPlains.getPlains();
 		hot  = GetSavanna.getSavanna();
+		if(ConfigHandler.useBoP || ConfigHandler.useBoPTable) {
+			tbound = 17;
+		} else {
+			tbound = 15;
+		}
 	}
 	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		int t = tile.getTemp() - tbound;
 		if((tile.getBiomeSeed() % 5) < t) {
 			tile.nextBiomeSeed();

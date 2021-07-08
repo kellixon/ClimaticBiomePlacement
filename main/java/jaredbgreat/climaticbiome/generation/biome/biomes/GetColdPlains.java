@@ -1,13 +1,10 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.LeafBiome;
-import jaredbgreat.climaticbiome.generation.biome.NoiseDoubleBiome;
-import jaredbgreat.climaticbiome.generation.biome.compat.BoP;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 public class GetColdPlains implements IBiomeSpecifier {
 	private static GetColdPlains plains;
@@ -19,22 +16,14 @@ public class GetColdPlains implements IBiomeSpecifier {
 	
 	public void init() {
 		coldPlains = new BiomeList();
-		if(ConfigHandler.useBoP) {
-			BoP.addColdPlains(coldPlains);
-		}
-		if(ConfigHandler.useCfg) {
-			DefReader.readBiomeData(coldPlains, "PlainsCold.cfg");
-		}
+		DefReader.readBiomeData(coldPlains, "PlainsCold.cfg");
 		if(coldPlains.isEmpty()) {
 			coldPlains.addItem(new LeafBiome(1), 2);			
 		}
 	}
 
 	@Override
-	public int getBiome(ChunkTile tile) {
-		if((tile.getBiomeSeed() % 3) == 0) {
-			return 13;  // TODO: Once GetAlpine is more generic use that
-		}
+	public long getBiome(ChunkTile tile) {
 		tile.nextBiomeSeed();
 		return coldPlains.getBiome(tile);
 	}

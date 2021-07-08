@@ -1,13 +1,11 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.LeafBiome;
 import jaredbgreat.climaticbiome.generation.biome.SeedDoubleBiome;
-import jaredbgreat.climaticbiome.generation.biome.compat.BoP;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 
 // TODO / FIXME: Fix for use with mods!
 public class GetSwamp implements IBiomeSpecifier {
@@ -27,15 +25,16 @@ public class GetSwamp implements IBiomeSpecifier {
 		cool = new BiomeList();
 		warm = new BiomeList();
 		hot  = new BiomeList();
-		warm.addItem(new LeafBiome(6), 3);
-		warm.addItem(new LeafBiome(134), 1);
-		cool.addItem(new SeedDoubleBiome(134, 3, 6));
-		if(ConfigHandler.useBoP) BoP.addSwamps(cold, cool, warm, hot);
-		if(ConfigHandler.useCfg) {
-			DefReader.readBiomeData(cold, "SwampCold.cfg");
-			DefReader.readBiomeData(cold, "SwampCool.cfg");
-			DefReader.readBiomeData(cold, "SwampWarm.cfg");
-			DefReader.readBiomeData(cold, "SwampTropical.cfg");
+		DefReader.readBiomeData(cold, "SwampCold.cfg");
+		DefReader.readBiomeData(cool, "SwampCool.cfg");
+		DefReader.readBiomeData(warm, "SwampWarm.cfg");
+		DefReader.readBiomeData(hot,  "SwampTropical.cfg");
+		if(warm.isEmpty()) {
+			warm.addItem(new LeafBiome(6), 3);
+			warm.addItem(new LeafBiome(134), 1);
+			if(cool.isEmpty()) {
+				cool.addItem(new SeedDoubleBiome(134, 3, 6));
+			}
 		}
 		// THIS MUST RUN LAST!!!
 		fixSwamps();
@@ -43,7 +42,8 @@ public class GetSwamp implements IBiomeSpecifier {
 	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
+		tile.setSwamp();
 		int temp = tile.getTemp();
     	if(temp < 12) {
     		return cold.getBiome(tile);

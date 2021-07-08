@@ -1,11 +1,15 @@
 package jaredbgreat.climaticbiome.biomes.pseudo;
 
+import jaredbgreat.climaticbiome.biomes.SubBiome;
 import jaredbgreat.climaticbiome.biomes.SubBiomeRegistry;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class PseudoBiomes {
 	public static BiomeDeepRiver deepRiver;	
-	public static BiomeDeepRiver deepFrozenRiver;	
+	public static BiomeDeepRiver deepFrozenRiver;
+	public static SubBiome lowRockBeach;
 	
 	
 	public static void createBiomes() {
@@ -23,6 +27,18 @@ public class PseudoBiomes {
 	public static void registerBiomes() {
 		SubBiomeRegistry reg = SubBiomeRegistry.getSubBiomeRegistry();
 		reg.add(deepRiver);
+		reg.add(deepFrozenRiver);
+	}
+	
+	
+	public static void addSubBiome(ResourceLocation vanillaRes, int id,
+				  float baseHeight, float heightVar) {
+		Biome vanilla = ForgeRegistries.BIOMES.getValue(vanillaRes);
+		SubBiome biome = new SubBiome(vanilla, id,  
+				new Biome.BiomeProperties(vanillaRes.getResourcePath() + id)
+					.setBaseHeight(baseHeight)
+					.setHeightVariation(heightVar));
+		SubBiomeRegistry.getSubBiomeRegistry().add(biome);
 	}
 	
 

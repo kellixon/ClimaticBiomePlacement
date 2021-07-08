@@ -1,5 +1,8 @@
 package jaredbgreat.climaticbiome.biomes.basic;
 
+import jaredbgreat.climaticbiome.biomes.feature.ScrubBushFinder;
+import jaredbgreat.climaticbiome.configuration.ConfigHandler;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -22,15 +25,12 @@ import net.minecraft.world.gen.feature.WorldGenBlockBlob;
 import net.minecraft.world.gen.feature.WorldGenShrub;
 
 public class Scrub extends Biome {
-	private static final WorldGenBlockBlob ROCK_PILES = new WorldGenBlockBlob(Blocks.COBBLESTONE, 0);
-	private static final IBlockState SPRUCE_LOG = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, 
-			BlockPlanks.EnumType.SPRUCE);    
-	private static final IBlockState OAK_LOG = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, 
-			BlockPlanks.EnumType.OAK);    
-	private static final IBlockState SPRUCE_LEAF = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, 
-			BlockPlanks.EnumType.SPRUCE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-	private static final IBlockState OAK_LEAF = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, 
-			BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));    
+	private static final WorldGenBlockBlob ROCK_PILES 
+				= new WorldGenBlockBlob(Blocks.COBBLESTONE, 0);
+	private static boolean deepSand = true;
+	private static boolean makeRocks = true;
+	
+	
 	private final Type type;
 	
 	public static enum Type {
@@ -71,29 +71,22 @@ public class Scrub extends Biome {
 
 	@Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random) {
-    	if((type != Type.DRY) && random.nextInt(5) == 0) {
+    	if((type != Type.DRY) && !ConfigHandler.useDT && (random.nextInt(5) == 0)) {
             return TREE_FEATURE;
     	}
     	else {
-    		IBlockState a, b;
-    		if(random.nextBoolean()) {
-    			a = OAK_LOG;
-    		} else {
-    			a = SPRUCE_LOG;
-    		}
-    		if(random.nextBoolean()) {
-    			b = OAK_LEAF;
-    		} else {
-    			b = SPRUCE_LEAF;
-    		}
-    		return new WorldGenShrub(a, b);
+    		return ScrubBushFinder.finder.getBush(random);
     	}
     }
 	
 
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, 
     		int x, int z, double noise) {
-        fillerBlock = Blocks.DIRT.getDefaultState();
+    	if(deepSand && (type == Type.DRY) && (noise > 1.25)) {
+    		fillerBlock = type.altTop;
+    	} else {
+    		fillerBlock = Blocks.DIRT.getDefaultState();
+    	}
         if (noise > 1.25) {
         	this.topBlock = type.altTop;
         } else {
@@ -102,19 +95,31 @@ public class Scrub extends Biome {
         generateBiomeTerrain(worldIn, rand, chunkPrimerIn, x, z, noise);
     }
 
+    
     public void decorate(World worldIn, Random random, BlockPos pos) {
-        int n;
-    	if(type == Type.DRY) {
-    		n = random.nextInt(4);
-    	} else {
-    		n = random.nextInt(2);
+    	if(makeRocks) {
+	        int n;
+	    	if(type == Type.DRY) {
+	    		n = random.nextInt(4);
+	    	} else {
+	    		n = random.nextInt(2);
+	    	}
+	    	for (int i = 0; i < n; i++) {
+	    		BlockPos blockpos = worldIn.getHeight(pos.add(random.nextInt(16) + 8, 0, random.nextInt(16) + 8));
+	            ROCK_PILES.generate(worldIn, random, blockpos);
+	        }
     	}
-    	for (int i = 0; i < n; i++) {
-    		BlockPos blockpos = worldIn.getHeight(pos.add(random.nextInt(16) + 8, 0, random.nextInt(16) + 8));
-            ROCK_PILES.generate(worldIn, random, blockpos);
-        }
-
         super.decorate(worldIn, random, pos);
+    }
+    
+    
+    public static void setDeepSand(boolean in) {
+    	deepSand = in;
+    }
+    
+    
+    public static void setMakeRocks(boolean in) {
+    	makeRocks = in;
     }
 
 }

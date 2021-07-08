@@ -1,29 +1,54 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
-import jaredbgreat.climaticbiome.biomes.basic.ModBiomes;
+import jaredbgreat.climaticbiome.biomes.ModBiomes;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
+import jaredbgreat.climaticbiome.configuration.ConfigHandler;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
+import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.LeafBiome;
 import jaredbgreat.climaticbiome.generation.biome.SeedDoubleBiome;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
 import net.minecraft.world.biome.Biome;
 
-public class GetHotForest extends BiomeList {
-	private static GetHotForest  tforest;
+public class GetHotForest implements IBiomeSpecifier {
+	private static GetHotForest tforest;
 	private GetHotForest() {
 		super();
 		init();
 	}
+	private BiomeList forests;
+	private GetPlains plains;
+	private GetSwamp swamp;
 	
 	
 	public void init() {
-		addItem(new SeedDoubleBiome(151, 5, 23));
-		addItem(new LeafBiome(Biome.getIdForBiome(ModBiomes.tropicalForestHills)));
-		addItem(new LeafBiome(Biome.getIdForBiome(ModBiomes.tropicalForest)), 3);
-		if(ConfigHandler.useCfg) {
-			DefReader.readBiomeData(this, "ForestTropical.cfg");
+		forests = new BiomeList();
+		swamp   = GetSwamp.getSwamp();
+		DefReader.readBiomeData(forests, "ForestTropical.cfg");
+		if(!ConfigHandler.includeForests) {
+			DefReader.readBiomeData(forests, "Jungle.cfg");			
 		}
+		if(forests.isEmpty()) {
+			if(ConfigHandler.includeForests) {
+				forests.addItem(new SeedDoubleBiome(151, 5, 23));
+				forests.addItem(new LeafBiome(Biome.getIdForBiome(ModBiomes.tropicalForestHills)));
+				forests.addItem(new LeafBiome(Biome.getIdForBiome(ModBiomes.tropicalForest)), 3);
+			} else {
+				forests.addItem(GetJungle.getJungle());
+			}
+		}
+	}
+
+
+
+	@Override
+	public long getBiome(ChunkTile tile) {
+		int role2 = tile.getBiomeSeed() % 7;
+		tile.nextBiomeSeed();
+		if((role2) == 0) {
+			return swamp.getBiome(tile);
+		}
+		return forests.getBiome(tile);
 	}
 	
 	
@@ -32,6 +57,12 @@ public class GetHotForest extends BiomeList {
 			tforest = new GetHotForest();
 		}
 		return tforest;
+	}
+
+
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 
 }

@@ -1,13 +1,18 @@
 package jaredbgreat.climaticbiome.generation.biome;
 
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
-import net.minecraft.world.biome.Biome;
+import java.util.StringTokenizer;
 
-public class WetDoubleBiome implements IBiomeSpecifier {
-	private final int a, b, boundary;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.registries.IForgeRegistry;
+
+public class WetDoubleBiome extends AbstractTerminalSpecifier {
+	private final long a, b;
+	private final int boundary;
 	
 	
-	public WetDoubleBiome(int a, int boundary, int b) {
+	public WetDoubleBiome(long a, int boundary, long b) {
 		this.a = a;
 		this.b = b;
 		this.boundary = boundary;
@@ -20,9 +25,16 @@ public class WetDoubleBiome implements IBiomeSpecifier {
 		this.boundary = boundary;
 	}
 	
+	
+	public WetDoubleBiome(String a, int boundary, String b, IForgeRegistry biomeReg) {
+		this.a = getBiomeNumber(a, biomeReg);
+		this.b = getBiomeNumber(b, biomeReg);
+		this.boundary = boundary;
+	}
+	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		int r = tile.getBiomeSeed();
 		if((tile.getWet() + (r & 1) - ((r & 2) >> 1)) < boundary) {
 			return a;
@@ -34,7 +46,7 @@ public class WetDoubleBiome implements IBiomeSpecifier {
 
 	@Override
 	public boolean isEmpty() {
-		return false;
+		return ((a < 0) || (b < 0));
 	}
 
 }

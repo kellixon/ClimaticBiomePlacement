@@ -18,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -46,6 +47,7 @@ public class BlockPineSlab extends BlockSlabBase {
         IBlockState iblockstate = this.blockState.getBaseState();
         iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
         setDefaultState(iblockstate);
+		Blocks.FIRE.setFireInfo(this, 5, 20);
 		BlockRegistrar.addBlock(this);
     }
 
@@ -89,11 +91,6 @@ public class BlockPineSlab extends BlockSlabBase {
 	@Override
 	public boolean isDouble() {
 		return false;
-	}
-
-	@Override
-	public String getUnlocalizedName(int meta) {
-		return null;
 	}
 
 	@Override

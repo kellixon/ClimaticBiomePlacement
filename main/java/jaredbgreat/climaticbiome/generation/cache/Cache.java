@@ -1,18 +1,22 @@
 package jaredbgreat.climaticbiome.generation.cache;
 
-// Something about this clearly isn't working as expected; adding 
-// extra data seems to prevent somethings from being retrieved 
-// and/or added -- which makes no sense, so I have no idea what 
-// I've done wrong.
+
 
 /**
- * A cache system using a based hash map.
+ * A cache system using a homebrewed hash map.  The reason for not using 
+ * java.util.HashMap is that for this use case and the processing needed 
+ * for the intended caching function would actually be far more complex 
+ * in terms of both code and processing than this, due unusual requirements 
+ * of the caching.
+ * 
+ * This does not include a linked list, but instead skips until finding a 
+ * place to put items if the correct spot is taken by a hash collision.
  * 
  * @author Jared Blackburn
  * @param <T>
  */
 public class Cache <T extends ICachable> {
-    private ICachable[] data;
+    private T[] data;
     private final int minSize;
     private int capacity;
     private int lowLimit;
@@ -23,7 +27,7 @@ public class Cache <T extends ICachable> {
      * Creates a cache with a default starting size elements.
      */
     public Cache(int size) {
-        data = new ICachable[size];
+        data = (T[]) new ICachable[size];
         minSize = size;
         capacity = (size * 3) / 4;
         lowLimit = ((size - minSize) * 3) / 16;
@@ -35,7 +39,7 @@ public class Cache <T extends ICachable> {
      * Creates a cache with a default starting size of 16 elements.
      */
     public Cache() {
-        data = new ICachable[16];
+        data = (T[]) new ICachable[16];
         minSize = 16;
         capacity = 12;
         lowLimit = 0;
@@ -217,8 +221,8 @@ public class Cache <T extends ICachable> {
      * This will grow the data size when needed.
      */
     private void grow() {
-        ICachable[] old = data;
-        ICachable[] data = new ICachable[(old.length * 3) / 2];
+        T[] old = data;
+        data = (T[]) new ICachable[(old.length * 3) / 2];
         for(int i = 0; i < old.length; i++) {
             if(old[i] != null) {
                 rebucket(old[i]);
@@ -233,8 +237,8 @@ public class Cache <T extends ICachable> {
      * This will shrink the data size when needed.
      */
     private void shrink() {
-        ICachable[] old = data;
-        ICachable[] data = new ICachable[old.length / 2];
+        T[] old = data;
+        data = (T[]) new ICachable[Math.max(old.length / 2, minSize)];
         for(int i = 0; i < old.length; i++) {
             if(old[i] != null) {
                 rebucket(old[i]);
@@ -245,7 +249,7 @@ public class Cache <T extends ICachable> {
     }
     
     
-    private void rebucket(ICachable item) {
+    private void rebucket(T item) {
         int bucket = (item.getCoords().hashCode() & 0x7fffffff) % data.length;
         int offset = 0;
         while(offset <= data.length) {
@@ -278,8 +282,8 @@ public class Cache <T extends ICachable> {
         if(length < lowLimit) {
             shrink();
         } else if(data.length != startSize) {
-        	ICachable[] old = data;
-        	data = new ICachable[data.length];
+        	T[] old = data;
+        	data = (T[]) new ICachable[data.length];
         	for(int i = 0; i < length; i++) {
         		if(old[i] != null) {
         			rebucket(old[i]);

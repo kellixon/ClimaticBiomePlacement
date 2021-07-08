@@ -1,5 +1,6 @@
 package jaredbgreat.climaticbiome.blocks.itemblocks;
 
+import jaredbgreat.climaticbiome.Info;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
@@ -21,15 +22,15 @@ public class ItemPineSlab extends ItemSlab {
 	public ItemPineSlab(Block block, BlockSlab singleSlab, BlockSlab doubleSlab) {
 		super(block, singleSlab, doubleSlab);
 		this.doubleSlab = doubleSlab;
-        setUnlocalizedName(block.getUnlocalizedName());
+        setUnlocalizedName(Info.ID + ".pine_slab");
         setRegistryName(block.getRegistryName());
 	}
     
     
-    @Override
-	public int getItemBurnTime(ItemStack stack) {
-		return 200;    	
-    }
+//    @Override
+//	public int getItemBurnTime(ItemStack stack) {
+//		return 200;    	
+//    }
 
 
 	private boolean func_180615_a(ItemStack p_180615_1_, World worldIn, BlockPos p_180615_3_) {

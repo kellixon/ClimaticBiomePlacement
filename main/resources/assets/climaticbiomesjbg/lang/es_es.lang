@@ -1,0 +1,51 @@
+generator.climatic_bp=Climaticos
+generator.climatic_real=Climático Realista
+
+createWorld.climaticbiomesjbg.biomesize=Tamaño del bioma
+createWorld.climaticbiomesjbg.genscale=Escala del mapa
+createWorld.climaticbiomesjbg.sisize=Tamaño de la isla de supervivencia
+
+createWorld.climaticbiomesjbg.continents=Continentes
+createWorld.climaticbiomesjbg.isles=Islas grandes
+createWorld.climaticbiomesjbg.water=Mundo acuático
+createWorld.climaticbiomesjbg.sislands=Isla de supervivencia
+
+createWorld.climaticbiomesjbg.forcewhole.on=Forzar biomas completos: sí
+createWorld.climaticbiomesjbg.addbeach.on=Agregar playa extra: sí
+createWorld.climaticbiomesjbg.addisles.on=Agregar islas adicionales: sí
+createWorld.climaticbiomesjbg.rockyscrub.on=Matorral rocoso: sí
+createWorld.climaticbiomesjbg.deepsand.on=Arena profunda en el matorral: sí
+createWorld.climaticbiomesjbg.volcanicislses.on=Islas Volcanicas: Si
+createWorld.climaticbiomesjbg.hasrivers.on=Hacer ríos: sí
+
+createWorld.climaticbiomesjbg.forcewhole.off=Forzar biomas completos: No
+createWorld.climaticbiomesjbg.addbeach.off=Agregar playa extra: No
+createWorld.climaticbiomesjbg.addisles.off=Agregar islas adicionales: No
+createWorld.climaticbiomesjbg.rockyscrub.off=Matorral rocoso: No
+createWorld.climaticbiomesjbg.deepsand.off=Arena profunda en el matorral: No
+createWorld.climaticbiomesjbg.volcanicislses.off=Islas Volcanicas: No
+createWorld.climaticbiomesjbg.hasrivers.off=Hacer ríos: No
+
+
+createWorld.climaticbiomesjbg.bopconf=Configurar Biomes O'Plenty
+
+tile.climaticbiomesjbg.pine_log.name=Madera de Pino
+tile.climaticbiomesjbg.pine_leaves.oak.name=Agujas de Pino
+tile.climaticbiomesjbg.pine_planks.name=Tablones de Madera de Pino
+tile.climaticbiomesjbg.pine_bark.name=Corteza de Pino
+tile.climaticbiomesjbg.pine_sapling.name=Retoño de Pino
+tile.climaticbiomesjbg.pine_slab.name=Losa de Madera de Pino
+tile.climaticbiomesjbg.pine_stairs.name=Escaleras de Pino
+tile.climaticbiomesjbg.pine_fence.name=Valla de Pino
+tile.climaticbiomesjbg.pine_gate.name=Puerta de Valla de Pino
+
+tile.climaticbiomesjbg.basalt.name=Basalto
+tile.climaticbiomesjbg.basalt_polished.name=Basalto pulido
+tile.climaticbiomesjbg.volcanic_ash.name=Ceniza volcánica
+
+tile.climaticbiomesjbg.peat.name=Turba
+
+item.tile.climaticbiomesjbg.pine_door.name=Puerta de Pino
+item.climaticbiomesjbg:pineseed.name=Cono de Pino
+
+

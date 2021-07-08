@@ -1,12 +1,13 @@
 package jaredbgreat.climaticbiome.generation.biome.biomes;
 
-import jaredbgreat.climaticbiome.ConfigHandler;
+import jaredbgreat.climaticbiome.compat.userdef.DefReader;
+import jaredbgreat.climaticbiome.configuration.ConfigHandler;
 import jaredbgreat.climaticbiome.generation.biome.BiomeList;
 import jaredbgreat.climaticbiome.generation.biome.IBiomeSpecifier;
 import jaredbgreat.climaticbiome.generation.biome.TempDoubleBiome;
-import jaredbgreat.climaticbiome.generation.biome.compat.BoP;
-import jaredbgreat.climaticbiome.generation.biome.compat.userdef.DefReader;
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class GetTaiga implements IBiomeSpecifier {
 	private static GetTaiga taiga;
@@ -15,31 +16,42 @@ public class GetTaiga implements IBiomeSpecifier {
 		init();
 	}
 	private BiomeList forest;
-	int tbound;
+	private static int tbound;
+	
+	
+	public static final class TaigaDoubleBiome extends TempDoubleBiome {
+		public TaigaDoubleBiome(Biome a, Biome b) {
+			super(a, tbound, b);
+		}
+		public TaigaDoubleBiome(int a, int b) {
+			super(a, tbound, b);
+		}
+		public TaigaDoubleBiome(String a, String b, IForgeRegistry biomeReg) {
+			super(a, tbound, b, biomeReg);
+		}	
+	}
 	
 	
 	public void init() {
-		if(ConfigHandler.useBoP) { // FIXME: Use something more generic, not BoP specific
+		if(ConfigHandler.useBoP || ConfigHandler.useBoPTable) {
 			tbound = 6;
 		} else {
 			tbound = 7;
 		}
 		forest = new BiomeList();
-		forest.addItem(new TempDoubleBiome(30,  tbound, 5),  4);
-		forest.addItem(new TempDoubleBiome(32,  tbound, 5),  2);
-		forest.addItem(new TempDoubleBiome(30,  tbound, 160));
-		forest.addItem(new TempDoubleBiome(158, tbound, 19),  3);
-		forest.addItem(new TempDoubleBiome(158, tbound, 133), 2);
-		if(ConfigHandler.useBoP) BoP.addTaiga(tbound, forest);
-		if(ConfigHandler.useCfg) {
-			DefReader.readBiomeData(forest, "Taiga.cfg");
+		DefReader.readBiomeData(forest, "Taiga.cfg");
+		if(forest.isEmpty()){
+			forest.addItem(new TempDoubleBiome(30,  tbound, 5),  4);
+			forest.addItem(new TempDoubleBiome(32,  tbound, 5),  2);
+			forest.addItem(new TempDoubleBiome(30,  tbound, 160));
+			forest.addItem(new TempDoubleBiome(158, tbound, 19),  3);
+			forest.addItem(new TempDoubleBiome(158, tbound, 133), 2);
 		}
 	}
 	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
-		// Doing this to allow for possible addition of other types (e.g., alpine)
+	public long getBiome(ChunkTile tile) {
 		return forest.getBiome(tile);
 	}
 	

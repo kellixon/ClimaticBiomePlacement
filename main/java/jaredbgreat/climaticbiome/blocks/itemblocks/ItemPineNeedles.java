@@ -11,17 +11,18 @@ public class ItemPineNeedles extends ItemLeaves {
         setMaxDamage(0);
         setUnlocalizedName(block.getUnlocalizedName());
         setRegistryName(block.getRegistryName());
+        setHasSubtypes(false);
 	}
 	
 
     public int getMetadata(int damage) {
-        return damage;
+        return 0;
     }
     
     
-    @Override
-	public int getItemBurnTime(ItemStack stack) {
-		return 100;    	
-    }
+//    @Override
+//	public int getItemBurnTime(ItemStack stack) {
+//		return 100;    	
+//    }
 
 }

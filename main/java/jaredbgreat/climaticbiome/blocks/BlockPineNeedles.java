@@ -17,6 +17,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -26,8 +27,10 @@ import net.minecraft.world.IBlockAccess;
 public class BlockPineNeedles extends BlockLeafBase {
 
 	public BlockPineNeedles() {
+		super();
 		setUnlocalizedName(Info.ID + ".pine_leaves");
 		setRegistryName(Info.ID, "pine_leaves");
+		Blocks.FIRE.setFireInfo(this, 5, 50);
 		BlockRegistrar.addBlock(this);
 		ItemRegistrar.addItem(new ItemPineNeedles(this));
 	}

@@ -1,13 +1,18 @@
 package jaredbgreat.climaticbiome.generation.biome;
 
-import jaredbgreat.climaticbiome.generation.generator.ChunkTile;
-import net.minecraft.world.biome.Biome;
+import java.util.StringTokenizer;
 
-public class SeedDoubleBiome implements IBiomeSpecifier {
-	private final int a, b, chance;
+import jaredbgreat.climaticbiome.generation.mapgenerator.ChunkTile;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.registries.IForgeRegistry;
+
+public class SeedDoubleBiome extends AbstractTerminalSpecifier {
+	private final long a, b;
+	private final int chance;
 	
 	
-	public SeedDoubleBiome(int a, int chance, int b) {
+	public SeedDoubleBiome(long a, int chance, long b) {
 		this.a = a;
 		this.b = b;
 		this.chance = chance;
@@ -20,9 +25,16 @@ public class SeedDoubleBiome implements IBiomeSpecifier {
 		this.chance = chance;
 	}
 	
+	
+	public SeedDoubleBiome(String a, int chance, String b, IForgeRegistry biomeReg) {
+		this.a = getBiomeNumber(a, biomeReg);
+		this.b = getBiomeNumber(b, biomeReg);
+		this.chance = chance;
+	}
+	
 
 	@Override
-	public int getBiome(ChunkTile tile) {
+	public long getBiome(ChunkTile tile) {
 		tile.nextBiomeSeed();
 		if((tile.getBiomeSeed() % chance) == 0) {
 			return a;
@@ -34,7 +46,7 @@ public class SeedDoubleBiome implements IBiomeSpecifier {
 
 	@Override
 	public boolean isEmpty() {
-		return false;
+		return ((a < 0) || (b < 0));
 	}
 
 

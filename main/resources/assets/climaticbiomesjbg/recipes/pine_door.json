@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "climaticbiomesjbg:wooden_door",
+  "group": "minecraft:wooden_door",
   "pattern": [
     "##",
     "##",
@@ -12,7 +12,7 @@
     }
   },
   "result": {
-    "item": "minecraft:birch_door",
+    "item": "climaticbiomesjbg:pine_door",
     "count": 3
   }
 }
